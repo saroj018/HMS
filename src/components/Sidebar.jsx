@@ -3,7 +3,7 @@ import { sideBar } from '../constant/sidebar'
 import { Link, useParams } from 'react-router-dom'
 
 const Sidebar = () => {
-    const [param, setParam] = useState('Dashboard')
+    const [param, setParam] = useState('/')
     return (
         <aside className='w-full max-w-[250px] flex flex-col  border-2 border-gray-300 rounded-md '>
             {

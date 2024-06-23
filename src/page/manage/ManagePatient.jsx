@@ -21,7 +21,7 @@ const ManagePatient = () => {
     const getAllDoctors = async () => {
         let patient = await getFetch(import.meta.env.VITE_HOST + '/patient/getallpatient')
         console.log(patient);
-        setpatientList(patient.data)
+        setpatientList(patient?.data)
     }
 
     useEffect(() => {

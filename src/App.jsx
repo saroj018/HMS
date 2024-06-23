@@ -13,6 +13,7 @@ import ManageReceptionist from './page/manage/ManageReceptionist'
 import ViewAppointment from './page/ViewAppointment'
 import { ToastContainer } from 'react-toastify';
   import 'react-toastify/dist/ReactToastify.css';
+import Login from './page/Login'
 
 const route=createBrowserRouter([
   {
@@ -20,7 +21,7 @@ const route=createBrowserRouter([
     element:<Layout/>,
     children:[
       {
-        path:'dashboard',
+        path:'/',
         element:<Dashboard/>
       },
       {
@@ -56,6 +57,9 @@ const route=createBrowserRouter([
         element:<ViewAppointment/>
       },
     ]
+  },{
+    path:'/login',
+    element:<Login/>
   }
 ])
 

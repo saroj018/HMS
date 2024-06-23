@@ -8,3 +8,9 @@ export const encryptPassword = async (password) => {
         console.log(error.message);
     }
 }
+
+export const decryptPassword=async(encPassword,rawPassword)=>{
+    let pass=await bcrypt.compare(rawPassword,encPassword)
+    console.log('dec',pass);
+    return pass
+}

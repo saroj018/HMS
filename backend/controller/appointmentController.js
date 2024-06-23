@@ -23,3 +23,19 @@ export const bookAppointment = asyncHandler(async (req, resp, next) => {
 
     return resp.json(new ApiResponse('doctor added successfully'))
 })
+
+
+
+export const getAllAppointment = asyncHandler(async (req, resp, next) => {
+    let appointment = await appointmentModel.find().populate([
+        {path:'patients',select:'-password'},
+        {path:'doctors',select:'-password'}
+    ])
+    console.log(appointment);
+    if (appointment.length > 0) {
+        return resp.json(new ApiResponse('', appointment))
+    } else {
+        let err = new customError('doctor not found')
+        next(err)
+    }
+})

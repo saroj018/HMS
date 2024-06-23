@@ -2,7 +2,8 @@ import { patientModel } from "../database/model/patientModel.js";
 import { ApiResponse } from "../helper/apiResponse.js";
 import { asyncHandler } from "../helper/asyncHandler.js";
 import { customError } from "../helper/customError.js";
-import { encryptPassword } from "../helper/encryptPassword.js";
+import { decryptPassword, encryptPassword } from "../helper/encryptPassword.js";
+import { genToken } from "../helper/token.js";
 import { patientRoute } from "../route/patientRoute.js";
 
 export const addPatient = asyncHandler(async (req, resp, next) => {
@@ -45,6 +46,37 @@ export const getAllPatients = asyncHandler(async (req, resp, next) => {
         return resp.json(new ApiResponse('', patient))
     } else {
         let err = new customError('doctor not found')
-        next(err)
+        return next(err)
     }
+})
+
+
+export const patientLogin = asyncHandler(async (req, resp, next) => {
+    let { email, password } = req.body
+
+    if (!email) {
+        let err = new customError('please provide email')
+        return next(err)
+    }
+
+    if (!password) {
+        let err = new customError('please provide password')
+        return next(err)
+    }
+
+    let findPatient = await patientModel.findOne({ email })
+    if (!findPatient) {
+        let err = new customError('invalid credintial')
+        return next(err)
+    }
+
+    let decodePassword = await decryptPassword(findPatient.password,password)
+    if (!decodePassword) {
+        let err = new customError('incorrect password')
+        return next(err)
+    }
+
+    let token = genToken({ id: findPatient._id, email,role:'patient' })
+
+    return resp.json(new ApiResponse('login successfully', findPatient,token))
 })

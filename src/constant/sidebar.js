@@ -1,7 +1,7 @@
 export const sideBar=[
     {
         name:'Dashboard',
-        url:'/dashboard'
+        url:'/'
     },
     {
         name:'Add Patient',

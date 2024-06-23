@@ -1,10 +1,11 @@
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import HeadingTypo from '../components/common/HeadingTypo'
 import Button from '../components/common/Button'
 import AddDoctor from './add/AddDoctor'
 import ConfirmationBox from '../components/ConfirmationBox'
 import Popup from 'reactjs-popup'
 import { X } from 'lucide-react'
+import { getFetch } from '../config/getFetch'
 
 const customStyle={
     width:'100%',
@@ -14,6 +15,17 @@ const customStyle={
 const ViewAppointment = () => {
     const [open, setOpen] = useState(false)
     const[confirm,setConfirm]=useState(false)
+    const [appointmentList, setappointmentList] = useState([])
+
+    const getAllAppointment = async () => {
+        let appointment = await getFetch(import.meta.env.VITE_HOST + '/appointment/getallappointment')
+        console.log(appointment);
+        setappointmentList(appointment.data)
+    }
+
+    useEffect(() => {
+        getAllAppointment()
+    }, [])
     return (
         <div className='w-full'>
             <HeadingTypo>Manage Appointment</HeadingTypo>
@@ -34,9 +46,9 @@ const ViewAppointment = () => {
                 </thead>
                 <tbody>
                     {
-                        Array(10).fill(null).map((_, index) => {
+                        appointmentList&&appointmentList?.map((ele, index) => {
                             return <tr key={index} className='border-2 border-gray-500'>
-                                <td className='text-center p-3'>3498</td>
+                                <td className='text-center p-3'>{ele._id}</td>
                                 <td className='text-center p-3'>John Doe</td>
                                 <td className='text-center p-3'>Kathmandu</td>
                                 <td className='text-center p-3'>2023-02-03</td>
