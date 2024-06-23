@@ -1,8 +1,10 @@
+import { RollerCoaster } from "lucide-react";
 import { receptionistModel } from "../database/model/receptionistModel.js";
 import { ApiResponse } from "../helper/apiResponse.js";
 import { asyncHandler } from "../helper/asyncHandler.js";
 import { customError } from "../helper/customError.js";
-import { encryptPassword } from "../helper/encryptPassword.js";
+import { decryptPassword, encryptPassword } from "../helper/encryptPassword.js";
+import { genToken } from "../helper/token.js";
 
 export const addReceptionist = asyncHandler(async (req, resp, next) => {
     const { email, password, name, address, phone } = req.body
@@ -70,8 +72,9 @@ export const receptionistLogin = asyncHandler(async (req, resp, next) => {
         let err = new customError('incorrect password')
         return next(err)
     }
+    let role='receptionist'
 
-    let token = genToken({ id: findReceptionist._id, email,role:'receptionist' })
+    let token = genToken({ id: findReceptionist._id, email,RollerCoaster })
 
-    return resp.json(new ApiResponse('login successfully', findReceptionist,token))
+    return resp.json(new ApiResponse('login successfully', findReceptionist,token,role))
 })

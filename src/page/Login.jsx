@@ -3,6 +3,7 @@ import HeadingTypo from '../components/common/HeadingTypo'
 import Button from '../components/common/Button'
 import Input from '../components/common/Input'
 import { postFetch } from '../config/postFetch'
+import { useNavigate } from 'react-router-dom'
 
 const btnOption = [
     {
@@ -30,6 +31,7 @@ const Login = () => {
         password: ''
     })
     const [signUp, setSignUp] = useState(false)
+    const navigate=useNavigate()
 
     const changeHandler = (e) => {
         setLogin((prv) => ({
@@ -41,6 +43,13 @@ const Login = () => {
     const loginHandler = async () => {
         let data = await postFetch(import.meta.env.VITE_HOST + `/${loginFrom}/login`, login)
         console.log(data);
+        if(data.success){
+            if(data.role=='patient'){
+                navigate('/viewappointment')
+            }else{
+                navigate('/')
+            }
+        }
     }
 
     const adminHandler = async() => {

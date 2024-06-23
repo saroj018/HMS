@@ -18,6 +18,9 @@ export const postFetch = async (url, body) => {
             if (data.token) {
                 localStorage.setItem('token', data.token)
             }
+            if(data.role){
+                localStorage.setItem('role',data.role)
+            }
             return data
         } else {
             toast.error(data.error, { delay: 100 })

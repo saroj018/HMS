@@ -76,8 +76,9 @@ console.log(email);
         let err = new customError('incorrect password')
         return next(err)
     }
+    let role='patient'
 
-    let token = genToken({ id: findPatient._id, email,role:'patient' })
+    let token = genToken({ id: findPatient._id, email,role })
 
-    return resp.json(new ApiResponse('login successfully', findPatient,token))
+    return resp.json(new ApiResponse('login successfully', findPatient,token,role))
 })

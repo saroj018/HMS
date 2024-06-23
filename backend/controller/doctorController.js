@@ -1,9 +1,11 @@
+import { RollerCoaster } from "lucide-react";
 import { doctorModel } from "../database/model/doctorModel.js";
 import { patientModel } from "../database/model/patientModel.js";
 import { ApiResponse } from "../helper/apiResponse.js";
 import { asyncHandler } from "../helper/asyncHandler.js";
 import { customError } from "../helper/customError.js";
-import { encryptPassword } from "../helper/encryptPassword.js";
+import { decryptPassword, encryptPassword } from "../helper/encryptPassword.js";
+import { genToken } from "../helper/token.js";
 
 
 export const addDoctor = asyncHandler(async (req, resp, next) => {
@@ -75,8 +77,8 @@ export const doctorLogin = asyncHandler(async (req, resp, next) => {
         let err = new customError('incorrect password')
         return next(err)
     }
+let role='doctor'
+    let token = genToken({ id: findDoctor._id, email,role })
 
-    let token = genToken({ id: findDoctor._id, email,role:'doctor' })
-
-    return resp.json(new ApiResponse('login successfully', findDoctor,token))
+    return resp.json(new ApiResponse('login successfully', findDoctor,token,role))
 })

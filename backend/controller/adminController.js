@@ -59,7 +59,8 @@ export const adminLogin = asyncHandler(async (req, resp, next) => {
         let err = new customError('incorrect password')
         return next(err)
     }
-    let token = genToken({ id: findAdmin._id, email, role: 'admin' })
+    let role='admin'
+    let token = genToken({ id: findAdmin._id, email, role })
 
-    resp.json(new ApiResponse('login successfully', findAdmin, token))
+    resp.json(new ApiResponse('login successfully', findAdmin, token,role))
 })

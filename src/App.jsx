@@ -14,6 +14,7 @@ import ViewAppointment from './page/ViewAppointment'
 import { ToastContainer } from 'react-toastify';
   import 'react-toastify/dist/ReactToastify.css';
 import Login from './page/Login'
+import ProtectedRoute from './ProtectedRoute'
 
 const route=createBrowserRouter([
   {
@@ -22,39 +23,39 @@ const route=createBrowserRouter([
     children:[
       {
         path:'/',
-        element:<Dashboard/>
+        element:<ProtectedRoute component={<Dashboard/>}/>
       },
       {
         path:'addpatient',
-        element:<AddPatient heading={'Add Patient'} flag={null}/>
+        element:<ProtectedRoute component={<AddPatient heading={'Add Patient'} flag={null}/>}/>
       },
       {
         path:'adddoctor',
-        element:<AddDoctor heading={'Add Doctor'} flag={null}/>
+        element:<ProtectedRoute component={<AddDoctor heading={'Add Doctor'} flag={null}/>}/>
       },
       {
         path:'addreceptionist',
-        element:<AddReceptionist/>
+        element:<ProtectedRoute component={<AddReceptionist/>}/>
       },
       {
         path:'bookappointment',
-        element:<BookAppointment/>
+        element:<ProtectedRoute component={<BookAppointment/>}/>
       },
       {
         path:'managepatient',
-        element:<ManagePatient/>
+        element:<ProtectedRoute component={<ManagePatient/>}/>
       },
       {
         path:'managedoctor',
-        element:<ManageDoctor/>
+        element:<ProtectedRoute component={<ManageDoctor/>}/>
       },
       {
         path:'managereceptionist',
-        element:<ManageReceptionist/>
+        element:<ProtectedRoute component={<ManageReceptionist/>}/>
       },
       {
         path:'viewappointment',
-        element:<ViewAppointment/>
+        element:<ProtectedRoute component={<ViewAppointment/>}/>
       },
     ]
   },{

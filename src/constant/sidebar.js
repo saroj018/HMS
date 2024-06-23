@@ -1,38 +1,47 @@
 export const sideBar=[
     {
         name:'Dashboard',
-        url:'/'
+        url:'/',
+        accessBy:['admin','receptionist']
     },
     {
         name:'Add Patient',
-        url:'/addpatient'
+        url:'/addpatient',
+        accessBy:['admin','receptionist']
     },
     {
         name:'Manage Patient',
-        url:'/managepatient'
+        url:'/managepatient',
+        accessBy:['admin','receptionist']
     },
     {
         name:'Add Doctor',
-        url:'/adddoctor'
+        url:'/adddoctor',
+        accessBy:['admin','receptionist']
     },
     {
         name:'Manage Doctor',
-        url:'/managedoctor'
+        url:'/managedoctor',
+        accessBy:['admin','receptionist']
     },
     {
         name:'Add Receptionist ',
-        url:'/addreceptionist'
+        url:'/addreceptionist',
+        accessBy:['admin']
     },
     {
         name:'Manage Receptionist ',
-        url:'/managereceptionist'
+        url:'/managereceptionist',
+        accessBy:['admin']
     },
     {
         name:'Book Appointment ',
-        url:'/bookappointment'
+        url:'/bookappointment',
+        accessBy:['patient']
     },
     {
         name:'View Appointment ',
-        url:'/viewappointment'
+        url:'/viewappointment',
+        accessBy:['admin','doctor','patient','receptionist']
     },
 ]
