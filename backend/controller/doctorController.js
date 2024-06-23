@@ -32,7 +32,7 @@ export const addDoctor = asyncHandler(async (req, resp, next) => {
         qualification,
         category,
         department,
-        time
+        shift
     })
     if (!dbQuery) {
         let err = new customError('faild to register doctor')
@@ -81,4 +81,73 @@ let role='doctor'
     let token = genToken({ id: findDoctor._id, email,role })
 
     return resp.json(new ApiResponse('login successfully', findDoctor,token,role))
+})
+
+
+
+export const getSingleDoctor = asyncHandler(async (req, resp, next) => {
+    let { id } = req.query
+
+    if (!id) {
+        let err = new customError('please provide id ')
+        return next(err)
+    }
+
+    let findDoctor = await doctorModel.findById(id)
+    if (!findDoctor) {
+        let err = new customError('doctor not found')
+        return next(err)
+    }
+
+    return resp.json(new ApiResponse('', findDoctor))
+})
+
+
+export const updateDoctor = asyncHandler(async (req, resp, next) => {
+    let { id } = req.query
+    if (!id) {
+        let err = new customError('please provide id')
+        return next(err)
+    }
+    let { name, address, phone } = req.body
+    console.log(name);
+
+    if ([name, address, phone].includes('')) {
+        let err = new customError('please provide all field')
+        return next(err)
+    }
+
+    let updatePatient = await doctorModel.findByIdAndUpdate(id, {
+        name,
+        address,
+        phone
+    },
+        {
+            new: true, runValidators: true
+        })
+
+    if (!updatePatient) {
+        let err = new customError('faild to update data')
+        return next(err)
+    }
+
+    return resp.json(new ApiResponse('doctor update successfully', updatePatient))
+})
+
+
+export const deleteDoctor=asyncHandler(async(req,resp,next)=>{
+    let{id}=req.query
+
+    if(!id){
+        let err=new customError('please provide id')
+        return next(err)
+    }
+
+    let deletePatient=await doctorModel.findByIdAndDelete(id)
+    if(!deletePatient){
+        let err=new customError('failed to delete doctor')
+        return next(err)
+    }
+
+    return resp.json(new ApiResponse('deleted successfully',deletePatient))
 })

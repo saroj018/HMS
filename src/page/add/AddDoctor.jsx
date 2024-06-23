@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import HeadingTypo from '../../components/common/HeadingTypo'
 import Input from '../../components/common/Input'
 import Button from '../../components/common/Button'
@@ -12,13 +12,14 @@ const AddDoctor = ({heading,flag}) => {
     name:'',
     email:'',
     password:'',
-    time:'',
+    shift:'',
     department:'',
     category:'',
     address:'',
     qualification:'',
     gender:''
   })
+  const[doctorList,setDoctorList]=useState([])
 
   const changeHandler=(e)=>{
     console.log(e.target.value);
@@ -28,8 +29,48 @@ const AddDoctor = ({heading,flag}) => {
     }))
   }
 
+  const getDoctor = async () => {
+    if (flag == 'update') {
+        let doctor = await getFetch(import.meta.env.VITE_HOST + `/patient/getsingledoctor?id=${id}`)
+        console.log(doctor);
+        setDoctorList(doctor?.data)
+    } 
+}
+
+useEffect(() => {
+    getDoctor()
+}, [])
+
+  useEffect(() => {
+    if (flag == 'update' && doctorList) {
+        setDoctor({
+            name: doctorList?.name,
+            address: doctorList?.address,
+            password: '',
+            phone: doctorList?.phone,
+            email: doctorList?.email,
+            gender: doctorList?.gender,
+            qualification: doctorList?.qualification,
+            category: doctorList?.category,
+            shift: doctorList?.shift,
+            department: doctorList?.department,
+        })
+    }
+}, [ flag,doctorList])
+
   const clickHandler=async()=>{
-    await postFetch(import.meta.env.VITE_HOST+'/doctor/adddoctor',doctor)
+    if(flag=='update'){
+      let data = await postFetch(import.meta.env.VITE_HOST + `/patient/updatedoctor?id=${id}`, doctor)
+            console.log(data);
+            if(data.success){
+                setOpen(false)
+                navigate('/managedoctor')
+                
+            }
+    }else{
+
+      await postFetch(import.meta.env.VITE_HOST+'/doctor/adddoctor',doctor)
+    }
   }
   return (
     <div className='w-full max-w-[700px] h-fit mx-auto border-2 border-gray-500 rounded-md p-4 my-auto'>
@@ -38,7 +79,7 @@ const AddDoctor = ({heading,flag}) => {
                 <Input value={doctor.name} onChange={changeHandler} name={'name'} placeholder={'enter name'} label={'Name'}/>
                 <Input value={doctor.email} onChange={changeHandler} name={'email'} placeholder={'enter email'} label={'Email'}/>
                 <Input value={doctor.address} onChange={changeHandler} name={'address'} placeholder={'enter address'} label={'Address'}/>
-                <Input value={doctor.time} onChange={changeHandler} name={'time'} placeholder={'enter Time'} label={'Time'}/>
+                <Input value={doctor.shift} onChange={changeHandler} name={'shift'} placeholder={'enter shift'} label={'Shift'}/>
                 <Input value={doctor.department} onChange={changeHandler} name={'department'} placeholder={'enter Department'} label={'Department'}/>
                 <Input value={doctor.qualification} onChange={changeHandler} name={'qualification'} placeholder={'enter Qualification'} label={'Qualification'}/>
                 <Input value={doctor.category} onChange={changeHandler} name={'category'} placeholder={'enter category'} label={'Category'}/>
@@ -46,7 +87,7 @@ const AddDoctor = ({heading,flag}) => {
                 <Select onChange={changeHandler} name={'gender'}>
                     <Option defaultSelect value=''>Select Gender</Option>
                     <Option value='male'>Male</Option>
-                    <Option value='female'>Male</Option>
+                    <Option value='female'>Female</Option>
                 </Select>
         </form>
                 <Button onClick={clickHandler} className={'w-full bg-green-500 text-white'}>{flag=='update'?'Update Doctor':'Add Doctor'}</Button>

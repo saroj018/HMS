@@ -21,7 +21,7 @@ const doctorSchema=new Schema({
         type:String,
         required:true
     },
-    time:{
+    shift:{
         type:String,
         required:true
     },
