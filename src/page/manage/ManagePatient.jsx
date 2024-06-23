@@ -79,7 +79,7 @@ const ManagePatient = () => {
                     <AddPatient setOpen={setOpen} id={id} heading='Update Patient' flag={'update'} />
                 </div>
             </Popup>
-            <ConfirmationBox id={id} open={confirm} setConfirm={setConfirm} />
+            <ConfirmationBox endpoint={'/patient/deletepatient'} id={id} open={confirm} setConfirm={setConfirm} />
         </div>
     )
 }

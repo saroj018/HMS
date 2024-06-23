@@ -8,11 +8,11 @@ const customStyle={
     'max-width':'400px'
 }
 
-const ConfirmationBox = ({ open, setConfirm,id }) => {
+const ConfirmationBox = ({ open, setConfirm,id,endpoint }) => {
 
     const clickHandler=async()=>{
         console.log('clci');
-        let data=await getFetch(import.meta.env.VITE_HOST+`/patient/deletepatient?id=${id}`)
+        let data=await getFetch(import.meta.env.VITE_HOST+`${endpoint}?id=${id}`)
         if(data.success){
             setConfirm(false)
         }

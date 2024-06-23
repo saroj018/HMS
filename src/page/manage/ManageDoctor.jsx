@@ -17,6 +17,7 @@ const ManageDoctor = () => {
     const [open, setOpen] = useState(false)
     const [confirm, setConfirm] = useState(false)
     const [doctorList, setDoctorList] = useState([])
+    const [id, setId] = useState()
 
     const getAllDoctors = async () => {
         let doctor = await getFetch(import.meta.env.VITE_HOST + '/doctor/getalldoctor')
@@ -27,6 +28,21 @@ const ManageDoctor = () => {
     useEffect(() => {
         getAllDoctors()
     }, [])
+
+    useEffect(() => {
+        getAllDoctors()
+    }, [open,confirm])
+
+
+    const editHandler = (id) => {
+        setOpen(true)
+        setId(id)
+    }
+
+    const deleteHandler = (id) => {
+        setId(id)
+        setConfirm(true)
+    }
     return (
         <div className='w-full'>
             <HeadingTypo>Manage Doctor</HeadingTypo>
@@ -59,8 +75,8 @@ const ManageDoctor = () => {
                                 <td className='text-center p-3'>{ele.qualification}</td>
                                 <td className='text-center p-3'>{ele.qualification}</td>
                                 <td className='text-center p-3 flex items-center justify-center gap-x-4'>
-                                    <Button onClick={() => setOpen(true)} className={'bg-blue-500 px-4 py-2'}>Edit</Button>
-                                    <Button onClick={() => setConfirm(true)} className={'px-4 py-2 bg-red-500'}>Delete</Button>
+                                    <Button onClick={() => editHandler(ele._id)} className={'bg-blue-500 px-4 py-2'}>Edit</Button>
+                                    <Button onClick={() => deleteHandler(ele._id)} className={'px-4 py-2 bg-red-500'}>Delete</Button>
                                 </td>
                             </tr>
                         })
@@ -71,10 +87,10 @@ const ManageDoctor = () => {
             <Popup contentStyle={customStyle} open={open} onClose={() => setOpen(false)}>
                 <div className='py-10 relative'>
                     <X onClick={() => setOpen(false)} className='absolute cursor-pointer left-[95%] top-1' />
-                    <AddDoctor setOpen={setOpen} heading='Update Doctor' flag={'update'} />
+                    <AddDoctor id={id} setOpen={setOpen} heading='Update Doctor' flag={'update'} />
                 </div>
             </Popup>
-            <ConfirmationBox open={confirm} setConfirm={setConfirm} />
+            <ConfirmationBox endpoint={'/doctor/deletedoctor'} id={id} open={confirm} setOpen={setOpen} setConfirm={setConfirm} />
         </div>
     )
 }

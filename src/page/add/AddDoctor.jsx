@@ -5,8 +5,9 @@ import Button from '../../components/common/Button'
 import Select from '../../components/common/Select'
 import Option from '../../components/common/Option'
 import { postFetch } from '../../config/postFetch'
+import { getFetch } from '../../config/getFetch'
 
-const AddDoctor = ({heading,flag}) => {
+const AddDoctor = ({heading,flag,id,setOpen}) => {
 
   const[doctor,setDoctor]=useState({
     name:'',
@@ -31,7 +32,7 @@ const AddDoctor = ({heading,flag}) => {
 
   const getDoctor = async () => {
     if (flag == 'update') {
-        let doctor = await getFetch(import.meta.env.VITE_HOST + `/patient/getsingledoctor?id=${id}`)
+        let doctor = await getFetch(import.meta.env.VITE_HOST + `/doctor/getsingledoctor?id=${id}`)
         console.log(doctor);
         setDoctorList(doctor?.data)
     } 
@@ -60,7 +61,7 @@ useEffect(() => {
 
   const clickHandler=async()=>{
     if(flag=='update'){
-      let data = await postFetch(import.meta.env.VITE_HOST + `/patient/updatedoctor?id=${id}`, doctor)
+      let data = await postFetch(import.meta.env.VITE_HOST + `/doctor/updatedoctor?id=${id}`, doctor)
             console.log(data);
             if(data.success){
                 setOpen(false)
@@ -77,14 +78,14 @@ useEffect(() => {
         <HeadingTypo>{heading}</HeadingTypo>
         <form className='grid grid-cols-2 gap-x-5 gap-y-4'>
                 <Input value={doctor.name} onChange={changeHandler} name={'name'} placeholder={'enter name'} label={'Name'}/>
-                <Input value={doctor.email} onChange={changeHandler} name={'email'} placeholder={'enter email'} label={'Email'}/>
+                <Input disabled={flag == 'update' ? true : false} value={doctor.email} onChange={changeHandler} name={'email'} placeholder={'enter email'} label={'Email'}/>
                 <Input value={doctor.address} onChange={changeHandler} name={'address'} placeholder={'enter address'} label={'Address'}/>
                 <Input value={doctor.shift} onChange={changeHandler} name={'shift'} placeholder={'enter shift'} label={'Shift'}/>
                 <Input value={doctor.department} onChange={changeHandler} name={'department'} placeholder={'enter Department'} label={'Department'}/>
                 <Input value={doctor.qualification} onChange={changeHandler} name={'qualification'} placeholder={'enter Qualification'} label={'Qualification'}/>
                 <Input value={doctor.category} onChange={changeHandler} name={'category'} placeholder={'enter category'} label={'Category'}/>
-                <Input value={doctor.password} onChange={changeHandler} name={'password'} placeholder={'enter password'} label={'Password'}/>
-                <Select onChange={changeHandler} name={'gender'}>
+                {!flag&&<Input value={doctor.password} onChange={changeHandler} name={'password'} placeholder={'enter password'} label={'Password'}/>}
+                <Select onChange={changeHandler} value={doctor.gender} name={'gender'}>
                     <Option defaultSelect value=''>Select Gender</Option>
                     <Option value='male'>Male</Option>
                     <Option value='female'>Female</Option>
