@@ -49,3 +49,34 @@ export const getAllDoctors = asyncHandler(async (req, resp, next) => {
         next(err)
     }
 })
+
+
+export const doctorLogin = asyncHandler(async (req, resp, next) => {
+    let { email, password } = req.body
+
+    if (!email) {
+        let err = new customError('please provide email')
+        return next(err)
+    }
+
+    if (!password) {
+        let err = new customError('please provide password')
+        return next(err)
+    }
+
+    let findDoctor = await doctorModel.findOne({ email })
+    if (!findDoctor) {
+        let err = new customError('invalid credintial')
+        return next(err)
+    }
+
+    let decodePassword = await decryptPassword(findDoctor.password,password)
+    if (!decodePassword) {
+        let err = new customError('incorrect password')
+        return next(err)
+    }
+
+    let token = genToken({ id: findDoctor._id, email,role:'doctor' })
+
+    return resp.json(new ApiResponse('login successfully', findDoctor,token))
+})

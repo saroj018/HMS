@@ -5,12 +5,14 @@ import { customError } from "../helper/customError.js";
 
 export const bookAppointment = asyncHandler(async (req, resp, next) => {
     const { doctor, category, blood, date } = req.body
+    const data=req.user
     if ([doctor, category, blood, date].includes('')) {
         let err = new customError('all field are required')
         return next(err)
     }
 
     let dbQuery = await appointmentModel.create({
+        patient:data._id,
         doctor,
         category,
         blood,
@@ -21,15 +23,15 @@ export const bookAppointment = asyncHandler(async (req, resp, next) => {
         return next(err)
     }
 
-    return resp.json(new ApiResponse('doctor added successfully'))
+    return resp.json(new ApiResponse('booking appointment successfully'))
 })
 
 
 
 export const getAllAppointment = asyncHandler(async (req, resp, next) => {
     let appointment = await appointmentModel.find().populate([
-        {path:'patients',select:'-password'},
-        {path:'doctors',select:'-password'}
+        {path:'doctor',select:'-password'},
+        {path:'patient',select:'-password'},
     ])
     console.log(appointment);
     if (appointment.length > 0) {

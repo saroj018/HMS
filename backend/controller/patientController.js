@@ -63,10 +63,11 @@ export const patientLogin = asyncHandler(async (req, resp, next) => {
         let err = new customError('please provide password')
         return next(err)
     }
-
+console.log(email);
     let findPatient = await patientModel.findOne({ email })
+    console.log(findPatient);
     if (!findPatient) {
-        let err = new customError('invalid credintial')
+        let err = new customError('user not found')
         return next(err)
     }
 

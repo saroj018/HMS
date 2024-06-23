@@ -1,13 +1,13 @@
 import mongoose, { Schema } from "mongoose";
 
 const appointmentSchema=new Schema({
-    name:{
+    patient:{
         type:Schema.Types.ObjectId,
-        ref:'pattients',
+        ref:'patient',
     },
     doctor:{
         type:Schema.Types.ObjectId,
-        ref:'doctors',
+        ref:'doctor',
         required:true
     },
     blood:{

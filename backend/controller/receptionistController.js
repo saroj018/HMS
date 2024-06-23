@@ -44,3 +44,34 @@ export const getAllReceptionistController = asyncHandler(async (req, resp, next)
         next(err)
     }
 })
+
+
+export const receptionistLogin = asyncHandler(async (req, resp, next) => {
+    let { email, password } = req.body
+
+    if (!email) {
+        let err = new customError('please provide email')
+        return next(err)
+    }
+
+    if (!password) {
+        let err = new customError('please provide password')
+        return next(err)
+    }
+
+    let findReceptionist = await receptionistModel.findOne({ email })
+    if (!findReceptionist) {
+        let err = new customError('invalid credintial')
+        return next(err)
+    }
+
+    let decodePassword = await decryptPassword(findReceptionist.password,password)
+    if (!decodePassword) {
+        let err = new customError('incorrect password')
+        return next(err)
+    }
+
+    let token = genToken({ id: findReceptionist._id, email,role:'receptionist' })
+
+    return resp.json(new ApiResponse('login successfully', findReceptionist,token))
+})

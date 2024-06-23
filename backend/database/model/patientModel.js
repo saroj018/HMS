@@ -3,11 +3,13 @@ import mongoose, { Schema, model } from "mongoose";
 const patientSchema = new Schema({
     email: {
         type: String,
-        required: true
+        required: true,
+        trim:true
     },
     password: {
         type: String,
-        required: true
+        required: true,
+        trim:true
     },
     name: {
         type: String,

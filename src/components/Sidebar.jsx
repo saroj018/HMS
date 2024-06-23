@@ -5,7 +5,7 @@ import { Link, useParams } from 'react-router-dom'
 const Sidebar = () => {
     const [param, setParam] = useState('/')
     return (
-        <aside className='w-full max-w-[250px] flex flex-col  border-2 border-gray-300 rounded-md '>
+        <aside className='w-full h-[100vh] max-h-[fit] max-w-[250px] flex flex-col  border-2 border-gray-300 rounded-md sticky left-0 top-0 '>
             {
                 sideBar.map((ele, index) => {
                     return <Link onClick={() => setParam(ele.name)} className={`py-4 px-2 text-xl hover:bg-gray-100 hover:text-black cursor-pointer rounded-md ${ele.url == window.location.pathname ? 'bg-blue-300 text-white' : ''}`} to={ele.url}><span key={index}>{ele.name}</span></Link>
