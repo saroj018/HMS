@@ -17,6 +17,7 @@ const ManageReceptionist = () => {
     const [open, setOpen] = useState(false)
     const[confirm,setConfirm]=useState(false)
     const [receptionistList, setReceptionistList] = useState([])
+    const[id,setId]=useState()
 
     const getAllReceptionist = async () => {
         let receptionist = await getFetch(import.meta.env.VITE_HOST + '/receptionist/getallreceptionist')
@@ -27,6 +28,20 @@ const ManageReceptionist = () => {
     useEffect(() => {
         getAllReceptionist()
     }, [])
+
+    useEffect(() => {
+        getAllReceptionist()
+    }, [open,confirm])
+
+    const editHandler = (id) => {
+        setOpen(true)
+        setId(id)
+    }
+
+    const deleteHandler = (id) => {
+        setId(id)
+        setConfirm(true)
+    }
     return (
         <div className='w-full'>
             <HeadingTypo>Manage Receptionist</HeadingTypo>
@@ -51,8 +66,8 @@ const ManageReceptionist = () => {
                                 <td className='text-center p-3'>{ele.phone}</td>
                                 <td className='text-center p-3'>{ele.email}</td>
                                 <td className='text-center p-3 flex items-center justify-center gap-x-4'>
-                                    <Button onClick={() => setOpen(true)} className={'bg-blue-500 px-4 py-2'}>Edit</Button>
-                                    <Button onClick={()=>setConfirm(true)} className={'px-4 py-2 bg-red-500'}>Delete</Button>
+                                    <Button onClick={() => editHandler(ele._id)} className={'bg-blue-500 px-4 py-2'}>Edit</Button>
+                                    <Button onClick={() => deleteHandler(ele._id)} className={'px-4 py-2 bg-red-500'}>Delete</Button>
                                 </td>
                             </tr>
                         })
@@ -63,10 +78,10 @@ const ManageReceptionist = () => {
             <Popup contentStyle={customStyle} open={open} onClose={()=>setOpen(false)}>
                 <div className='py-10 relative'>
                     <X  onClick={()=>setOpen(false)} className='absolute cursor-pointer left-[95%] top-1' />
-                    <AddReceptionist heading='Update Receptionist' flag={'update'} />
+                    <AddReceptionist setOpen={setOpen} id={id} heading='Update Receptionist' flag={'update'} />
                 </div>
             </Popup>
-            <ConfirmationBox open={confirm} setConfirm={setConfirm}/>
+            <ConfirmationBox id={id} endpoint={'/receptionist/deletereceptionist'} open={confirm} setConfirm={setConfirm}/>
         </div>
     )
 }

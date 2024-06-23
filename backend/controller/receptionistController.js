@@ -78,3 +78,71 @@ export const receptionistLogin = asyncHandler(async (req, resp, next) => {
 
     return resp.json(new ApiResponse('login successfully', findReceptionist,token,role))
 })
+
+
+export const getSingleReceptionist = asyncHandler(async (req, resp, next) => {
+    let { id } = req.query
+
+    if (!id) {
+        let err = new customError('please provide id ')
+        return next(err)
+    }
+
+    let findReceptionist = await receptionistModel.findById(id)
+    if (!findReceptionist) {
+        let err = new customError('patient not found')
+        return next(err)
+    }
+
+    return resp.json(new ApiResponse('', findReceptionist))
+})
+
+
+export const updateReceptionist = asyncHandler(async (req, resp, next) => {
+    let { id } = req.query
+    if (!id) {
+        let err = new customError('please provide id')
+        return next(err)
+    }
+    let { name, address, phone } = req.body
+    console.log(name);
+
+    if ([name, address, phone].includes('')) {
+        let err = new customError('please provide all field')
+        return next(err)
+    }
+
+    let updateReceptionist = await receptionistModel.findByIdAndUpdate(id, {
+        name,
+        address,
+        phone
+    },
+        {
+            new: true, runValidators: true
+        })
+
+    if (!updateReceptionist) {
+        let err = new customError('faild to update data')
+        return next(err)
+    }
+
+    return resp.json(new ApiResponse('receptionist update successfully', updateReceptionist))
+})
+
+
+export const deleteReceptionist=asyncHandler(async(req,resp,next)=>{
+    let{id}=req.query
+
+    if(!id){
+        let err=new customError('please provide id')
+        return next(err)
+    }
+
+    let deleteReceptionist=await receptionistModel.findByIdAndDelete(id)
+    if(!deleteReceptionist){
+        let err=new customError('failed to delete receptionist')
+        return next(err)
+    }
+
+    return resp.json(new ApiResponse('deleted successfully',deleteReceptionist))
+})
