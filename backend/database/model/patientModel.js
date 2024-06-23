@@ -20,6 +20,10 @@ const patientSchema = new Schema({
     phone: {
         type: String,
         required: true
+    },
+    admiton:{
+        type:Date,
+        default:new Date()
     }
 })
 

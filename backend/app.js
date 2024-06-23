@@ -5,6 +5,7 @@ import { patientRoute } from './route/patientRoute.js'
 import cors from 'cors'
 import { doctorRoute } from './route/doctorRoute.js'
 import { receptionistRoute } from './route/receptionistRoute.js'
+import { appointmentRoute } from './route/appointmentRoute.js'
 dotenv.config()
 
 export const app = express()
@@ -14,5 +15,6 @@ app.use(express.json())
 app.use('/api/patient',patientRoute)
 app.use('/api/doctor',doctorRoute)
 app.use('/api/receptionist',receptionistRoute)
+app.use('/api/appointment',appointmentRoute)
 
 app.use(globleErrorHandler)

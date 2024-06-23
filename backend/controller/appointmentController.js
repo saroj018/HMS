@@ -1,34 +1,16 @@
-import { doctorModel } from "../database/model/doctorModel.js";
-import { patientModel } from "../database/model/patientModel.js";
+import { appointmentModel } from "../database/model/appointmentModel.js";
 import { ApiResponse } from "../helper/apiResponse.js";
 import { asyncHandler } from "../helper/asyncHandler.js";
 import { customError } from "../helper/customError.js";
-import { encryptPassword } from "../helper/encryptPassword.js";
-
-const [appointment, setAppointment] = useState({
-    name: '',
-    address: '',
-    phone: '',
-    email: '',
-    blood: '',
-    date: '',
-    category: '',
-    doctor: ''
-})
-
 
 export const bookAppointment = asyncHandler(async (req, resp, next) => {
-    const { email, password, name, address, doctor, category, blood, date } = req.body
-    if ([email, password, name, address, doctor, category, blood, date].includes('')) {
+    const { doctor, category, blood, date } = req.body
+    if ([doctor, category, blood, date].includes('')) {
         let err = new customError('all field are required')
         return next(err)
     }
 
-    let dbQuery = await doctorModel.create({
-        email,
-        password,
-        name,
-        address,
+    let dbQuery = await appointmentModel.create({
         doctor,
         category,
         blood,

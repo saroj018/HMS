@@ -1,10 +1,11 @@
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import HeadingTypo from '../../components/common/HeadingTypo'
 import Button from '../../components/common/Button'
 import Popup from 'reactjs-popup'
 import AddPatient from '../add/AddPatient'
 import { X } from 'lucide-react'
 import ConfirmationBox from '../../components/ConfirmationBox'
+import { getFetch } from '../../config/getFetch'
 
 const customStyle={
     width:'100%',
@@ -14,6 +15,18 @@ const customStyle={
 const ManagePatient = () => {
     const [open, setOpen] = useState(false)
     const[confirm,setConfirm]=useState(false)
+
+    const [patientList, setpatientList] = useState([])
+
+    const getAllDoctors = async () => {
+        let patient = await getFetch(import.meta.env.VITE_HOST + '/patient/getallpatient')
+        console.log(patient);
+        setpatientList(patient.data)
+    }
+
+    useEffect(() => {
+        getAllDoctors()
+    }, [])
     return (
         <div className='w-full'>
             <HeadingTypo>Manage Patient</HeadingTypo>
@@ -31,14 +44,14 @@ const ManagePatient = () => {
                 </thead>
                 <tbody>
                     {
-                        Array(10).fill(null).map((_, index) => {
+                       patientList&&patientList?.map((ele, index) => {
                             return <tr key={index} className='border-2 border-gray-500'>
-                                <td className='text-center p-3'>3498</td>
-                                <td className='text-center p-3'>John Doe</td>
-                                <td className='text-center p-3'>Kathmandu</td>
-                                <td className='text-center p-3'>9876543210</td>
-                                <td className='text-center p-3'>abc@gmail.com</td>
-                                <td className='text-center p-3'>2020-2-3</td>
+                                <td className='text-center p-3'>{ele._id}</td>
+                                <td className='text-center p-3'>{ele.name}</td>
+                                <td className='text-center p-3'>{ele.address}</td>
+                                <td className='text-center p-3'>{ele.phone}</td>
+                                <td className='text-center p-3'>{ele.email}</td>
+                                <td className='text-center p-3'>{new Date(ele.admiton).toDateString()}</td>
                                 <td className='text-center p-3 flex items-center justify-center gap-x-4'>
                                     <Button onClick={() => setOpen(true)} className={'bg-blue-500 px-4 py-2'}>Edit</Button>
                                     <Button onClick={()=>setConfirm(true)} className={'px-4 py-2 bg-red-500'}>Delete</Button>

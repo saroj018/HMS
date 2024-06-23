@@ -3,4 +3,4 @@ import { bookAppointment } from "../controller/appointmentController.js";
 
 export const appointmentRoute=Router()
 
-appointmentRoute.route('/addreceptionist').post(bookAppointment)
+appointmentRoute.route('/bookappointment').post(bookAppointment)

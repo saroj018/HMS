@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import HeadingTypo from '../../components/common/HeadingTypo'
 import Button from '../../components/common/Button'
 import Popup from 'reactjs-popup'
@@ -6,6 +6,7 @@ import AddPatient from '../add/AddPatient'
 import { X } from 'lucide-react'
 import ConfirmationBox from '../../components/ConfirmationBox'
 import AddReceptionist from '../add/AddReceptionist'
+import { getFetch } from '../../config/getFetch'
 
 const customStyle={
     width:'100%',
@@ -15,6 +16,17 @@ const customStyle={
 const ManageReceptionist = () => {
     const [open, setOpen] = useState(false)
     const[confirm,setConfirm]=useState(false)
+    const [receptionistList, setReceptionistList] = useState([])
+
+    const getAllReceptionist = async () => {
+        let receptionist = await getFetch(import.meta.env.VITE_HOST + '/receptionist/getallreceptionist')
+        console.log(receptionist);
+        setReceptionistList(receptionist.data)
+    }
+
+    useEffect(() => {
+        getAllReceptionist()
+    }, [])
     return (
         <div className='w-full'>
             <HeadingTypo>Manage Receptionist</HeadingTypo>
@@ -31,13 +43,13 @@ const ManageReceptionist = () => {
                 </thead>
                 <tbody>
                     {
-                        Array(10).fill(null).map((_, index) => {
+                        receptionistList&&receptionistList?.map((ele, index) => {
                             return <tr key={index} className='border-2 border-gray-500'>
-                                <td className='text-center p-3'>3498</td>
-                                <td className='text-center p-3'>John Doe</td>
-                                <td className='text-center p-3'>Kathmandu</td>
-                                <td className='text-center p-3'>9876543210</td>
-                                <td className='text-center p-3'>abc@gmail.com</td>
+                                <td className='text-center p-3'>{ele._id}</td>
+                                <td className='text-center p-3'>{ele.name}</td>
+                                <td className='text-center p-3'>{ele.address}</td>
+                                <td className='text-center p-3'>{ele.phone}</td>
+                                <td className='text-center p-3'>{ele.email}</td>
                                 <td className='text-center p-3 flex items-center justify-center gap-x-4'>
                                     <Button onClick={() => setOpen(true)} className={'bg-blue-500 px-4 py-2'}>Edit</Button>
                                     <Button onClick={()=>setConfirm(true)} className={'px-4 py-2 bg-red-500'}>Delete</Button>

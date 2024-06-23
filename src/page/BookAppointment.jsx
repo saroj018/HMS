@@ -36,9 +36,7 @@ const BookAppointment = () => {
                 <Input value={appointment.category} onChange={changeHandler} name={'category'} placeholder={'enter Category'} label={'Category'}/>
                 <Select onChange={changeHandler} name={'doctor'} label={'Select Doctor'}>
                     <Option defaultSelect value={''}>Select Doctor</Option>
-                    <Option value={'demo'}>John Doe</Option>
-                    <Option value={'demo'}>John Doe</Option>
-                    <Option value={'demo'}>John Doe</Option>
+                    <Option value={11}>John Doe</Option>
                 </Select>
         </form>
                 <Button onClick={clickHandler} className={'w-full bg-green-500 text-white'}>Book Appointment</Button>

@@ -39,3 +39,13 @@ export const addDoctor = asyncHandler(async (req, resp, next) => {
 
     return resp.json(new ApiResponse('doctor added successfully'))
 })
+
+export const getAllDoctors = asyncHandler(async (req, resp, next) => {
+    let doctor = await doctorModel.find()
+    if (doctor.length > 0) {
+        return resp.json(new ApiResponse('', doctor))
+    } else {
+        let err = new customError('doctor not found')
+        next(err)
+    }
+})

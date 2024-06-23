@@ -3,6 +3,7 @@ import { ApiResponse } from "../helper/apiResponse.js";
 import { asyncHandler } from "../helper/asyncHandler.js";
 import { customError } from "../helper/customError.js";
 import { encryptPassword } from "../helper/encryptPassword.js";
+import { patientRoute } from "../route/patientRoute.js";
 
 export const addPatient = asyncHandler(async (req, resp, next) => {
     const { email, password, name, address, phone } = req.body
@@ -26,10 +27,24 @@ export const addPatient = asyncHandler(async (req, resp, next) => {
         address,
         phone
     })
+    console.log(dbQuery);
     if (!dbQuery) {
         let err = new customError('faild to register patient')
         return next(err)
     }
 
     return resp.json(new ApiResponse('patient added successfully'))
+})
+
+
+
+
+export const getAllPatients = asyncHandler(async (req, resp, next) => {
+    let patient = await patientModel.find()
+    if (patient.length > 0) {
+        return resp.json(new ApiResponse('', patient))
+    } else {
+        let err = new customError('doctor not found')
+        next(err)
+    }
 })

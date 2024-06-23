@@ -33,3 +33,14 @@ export const addReceptionist = asyncHandler(async (req, resp, next) => {
 
     return resp.json(new ApiResponse('receptionist added successfully'))
 })
+
+
+export const getAllReceptionistController = asyncHandler(async (req, resp, next) => {
+    let receptionist = await receptionistModel.find()
+    if (receptionist.length > 0) {
+        return resp.json(new ApiResponse('', receptionist))
+    } else {
+        let err = new customError('doctor not found')
+        next(err)
+    }
+})
