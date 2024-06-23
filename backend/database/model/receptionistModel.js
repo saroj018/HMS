@@ -2,23 +2,23 @@ import mongoose, { Schema } from "mongoose";
 
 const receptionistSchema=new Schema({
     name:{
-        type:Strig,
+        type:String,
         required:true
     },
     address:{
-        type:Strig,
+        type:String,
         required:true
     },
     phone:{
-        type:Strig,
+        type:String,
         required:true
     },
     email:{
-        type:Strig,
+        type:String,
         required:true
     },
     password:{
-        type:Strig,
+        type:String,
         required:true
     },
 })

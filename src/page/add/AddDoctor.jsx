@@ -21,6 +21,7 @@ const AddDoctor = ({heading,flag}) => {
   })
 
   const changeHandler=(e)=>{
+    console.log(e.target.value);
     setDoctor((prv)=>({
       ...prv,
       [e.target.name]:e.target.value
