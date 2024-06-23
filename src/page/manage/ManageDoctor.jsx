@@ -71,7 +71,7 @@ const ManageDoctor = () => {
             <Popup contentStyle={customStyle} open={open} onClose={() => setOpen(false)}>
                 <div className='py-10 relative'>
                     <X onClick={() => setOpen(false)} className='absolute cursor-pointer left-[95%] top-1' />
-                    <AddDoctor heading='Update Doctor' flag={'update'} />
+                    <AddDoctor setOpen={setOpen} heading='Update Doctor' flag={'update'} />
                 </div>
             </Popup>
             <ConfirmationBox open={confirm} setConfirm={setConfirm} />

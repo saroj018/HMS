@@ -42,6 +42,6 @@ export const sideBar=[
     {
         name:'View Appointment ',
         url:'/viewappointment',
-        accessBy:['admin','doctor','patient','receptionist']
+        accessBy:['admin','doctor','patient','receptionist@gmail.com']
     },
 ]

@@ -63,7 +63,7 @@ export const patientLogin = asyncHandler(async (req, resp, next) => {
         let err = new customError('please provide password')
         return next(err)
     }
-console.log(email);
+    console.log(email);
     let findPatient = await patientModel.findOne({ email })
     console.log(findPatient);
     if (!findPatient) {
@@ -71,14 +71,83 @@ console.log(email);
         return next(err)
     }
 
-    let decodePassword = await decryptPassword(findPatient.password,password)
+
+    let decodePassword = await decryptPassword(findPatient.password, password)
     if (!decodePassword) {
         let err = new customError('incorrect password')
         return next(err)
     }
-    let role='patient'
+    let role = 'patient'
 
-    let token = genToken({ id: findPatient._id, email,role })
+    let token = genToken({ id: findPatient._id, email, role })
 
-    return resp.json(new ApiResponse('login successfully', findPatient,token,role))
+    return resp.json(new ApiResponse('login successfully', findPatient, token, role))
+})
+
+
+export const getSinglePatient = asyncHandler(async (req, resp, next) => {
+    let { id } = req.query
+
+    if (!id) {
+        let err = new customError('please provide id ')
+        return next(err)
+    }
+
+    let findPatient = await patientModel.findById(id)
+    if (!findPatient) {
+        let err = new customError('patient not found')
+        return next(err)
+    }
+
+    return resp.json(new ApiResponse('', findPatient))
+})
+
+
+export const updatePatient = asyncHandler(async (req, resp, next) => {
+    let { id } = req.query
+    if (!id) {
+        let err = new customError('please provide id')
+        return next(err)
+    }
+    let { name, address, phone } = req.body
+    console.log(name);
+
+    if ([name, address, phone].includes('')) {
+        let err = new customError('please provide all field')
+        return next(err)
+    }
+
+    let updatePatient = await patientModel.findByIdAndUpdate(id, {
+        name,
+        address,
+        phone
+    },
+        {
+            new: true, runValidators: true
+        })
+
+    if (!updatePatient) {
+        let err = new customError('faild to update data')
+        return next(err)
+    }
+
+    return resp.json(new ApiResponse('patient update successfully', updatePatient))
+})
+
+
+export const deletePatient=asyncHandler(async(req,resp,next)=>{
+    let{id}=req.query
+
+    if(!id){
+        let err=new customError('please provide id')
+        return next(err)
+    }
+
+    let deletePatient=await patientModel.findByIdAndDelete(id)
+    if(!deletePatient){
+        let err=new customError('failed to delete patient')
+        return next(err)
+    }
+
+    return resp.json(new ApiResponse('deleted successfully',deletePatient))
 })

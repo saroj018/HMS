@@ -7,26 +7,37 @@ import { X } from 'lucide-react'
 import ConfirmationBox from '../../components/ConfirmationBox'
 import { getFetch } from '../../config/getFetch'
 
-const customStyle={
-    width:'100%',
-    'max-width':'650px'
+const customStyle = {
+    width: '100%',
+    'max-width': '650px'
 }
 
 const ManagePatient = () => {
     const [open, setOpen] = useState(false)
-    const[confirm,setConfirm]=useState(false)
+    const [confirm, setConfirm] = useState(false)
+    const [id, setId] = useState()
 
     const [patientList, setpatientList] = useState([])
 
-    const getAllDoctors = async () => {
+    const getAllPatients = async () => {
         let patient = await getFetch(import.meta.env.VITE_HOST + '/patient/getallpatient')
         console.log(patient);
         setpatientList(patient?.data)
     }
 
     useEffect(() => {
-        getAllDoctors()
-    }, [])
+        getAllPatients()
+    }, [open,confirm])
+
+    const editHandler = (id) => {
+        setOpen(true)
+        setId(id)
+    }
+
+    const deleteHandler = (id) => {
+        setId(id)
+        setConfirm(true)
+    }
     return (
         <div className='w-full'>
             <HeadingTypo>Manage Patient</HeadingTypo>
@@ -44,7 +55,7 @@ const ManagePatient = () => {
                 </thead>
                 <tbody>
                     {
-                       patientList&&patientList?.map((ele, index) => {
+                        patientList && patientList?.map((ele, index) => {
                             return <tr key={index} className='border-2 border-gray-500'>
                                 <td className='text-center p-3'>{ele._id}</td>
                                 <td className='text-center p-3'>{ele.name}</td>
@@ -53,8 +64,8 @@ const ManagePatient = () => {
                                 <td className='text-center p-3'>{ele.email}</td>
                                 <td className='text-center p-3'>{new Date(ele.admiton).toDateString()}</td>
                                 <td className='text-center p-3 flex items-center justify-center gap-x-4'>
-                                    <Button onClick={() => setOpen(true)} className={'bg-blue-500 px-4 py-2'}>Edit</Button>
-                                    <Button onClick={()=>setConfirm(true)} className={'px-4 py-2 bg-red-500'}>Delete</Button>
+                                    <Button onClick={() => editHandler(ele._id)} className={'bg-blue-500 px-4 py-2'}>Edit</Button>
+                                    <Button onClick={() => deleteHandler(ele._id)} className={'px-4 py-2 bg-red-500'}>Delete</Button>
                                 </td>
                             </tr>
                         })
@@ -62,13 +73,13 @@ const ManagePatient = () => {
                 </tbody>
             </table>
 
-            <Popup contentStyle={customStyle} open={open} onClose={()=>setOpen(false)}>
+            <Popup contentStyle={customStyle} open={open} onClose={() => setOpen(false)}>
                 <div className='py-10 relative'>
-                    <X  onClick={()=>setOpen(false)} className='absolute cursor-pointer left-[95%] top-1' />
-                    <AddPatient heading='Update Patient' flag={'update'} />
+                    <X onClick={() => setOpen(false)} className='absolute cursor-pointer left-[95%] top-1' />
+                    <AddPatient setOpen={setOpen} id={id} heading='Update Patient' flag={'update'} />
                 </div>
             </Popup>
-            <ConfirmationBox open={confirm} setConfirm={setConfirm}/>
+            <ConfirmationBox id={id} open={confirm} setConfirm={setConfirm} />
         </div>
     )
 }

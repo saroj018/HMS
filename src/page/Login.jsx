@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import HeadingTypo from '../components/common/HeadingTypo'
 import Button from '../components/common/Button'
 import Input from '../components/common/Input'
@@ -26,13 +26,30 @@ const btnOption = [
 
 const Login = () => {
     const [loginFrom, setLoginFrom] = useState('admin')
+    let route = window.location.pathname
+    let user = localStorage.getItem('role')
+    console.log(user);
+    let token = localStorage.getItem('token')
     const [login, setLogin] = useState({
         email: '',
         password: ''
     })
     const [signUp, setSignUp] = useState(false)
-    const navigate=useNavigate()
+    const navigate = useNavigate()
 
+
+    useEffect(() => {
+        if (user && token) {
+            if(route=='/login'){
+                if(user=='doctor'|| user=='patient'){
+                    navigate('/viewappointment')
+                }else{
+                    navigate('/')
+                }
+            }
+        }
+        return () => null
+    }, [route])
     const changeHandler = (e) => {
         setLogin((prv) => ({
             ...prv,
@@ -43,17 +60,17 @@ const Login = () => {
     const loginHandler = async () => {
         let data = await postFetch(import.meta.env.VITE_HOST + `/${loginFrom}/login`, login)
         console.log(data);
-        if(data.success){
-            if(data.role=='patient'){
-                navigate('/viewappointment')
-            }else{
+        if (data.success) {
+            if (data.role === 'receptionist' || data.role=== 'admin') {
                 navigate('/')
+            } else {
+                navigate('/viewappointment')
             }
         }
     }
 
-    const adminHandler = async() => {
-        let data=await postFetch(import.meta.env.VITE_HOST+'/admin/signup',login)
+    const adminHandler = async () => {
+        let data = await postFetch(import.meta.env.VITE_HOST + '/admin/signup', login)
         console.log(data);
     }
     return (
