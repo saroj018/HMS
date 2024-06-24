@@ -16,6 +16,7 @@ const ViewAppointment = () => {
     const [open, setOpen] = useState(false)
     const[confirm,setConfirm]=useState(false)
     const [appointmentList, setappointmentList] = useState([])
+    const[id,setId]=useState()
 
     const getAllAppointment = async () => {
         let appointment = await getFetch(import.meta.env.VITE_HOST + '/appointment/getallappointment')
@@ -26,6 +27,15 @@ const ViewAppointment = () => {
     useEffect(() => {
         getAllAppointment()
     }, [])
+
+    useEffect(() => {
+        getAllAppointment()
+    }, [open,confirm])
+
+    const deleteHandler = (id) => {
+        setId(id)
+        setConfirm(true)
+    }
     return (
         <div className='w-full'>
             <HeadingTypo>Manage Appointment</HeadingTypo>
@@ -58,7 +68,7 @@ const ViewAppointment = () => {
                                 <td className='text-center p-3'>{ele.category}</td>
                                 <td className='text-center p-3'>{ele.blood}</td>
                                 <td className='text-center p-3 flex items-center justify-center gap-x-4'>
-                                    <Button onClick={()=>setConfirm(true)} className={'px-4 py-2 bg-red-500'}>Delete</Button>
+                                    <Button onClick={() => deleteHandler(ele._id)} className={'px-4 py-2 bg-red-500'}>Delete</Button>
                                 </td>
                             </tr>
                         })
@@ -72,7 +82,7 @@ const ViewAppointment = () => {
                     <AddDoctor heading='Update Doctor' flag={'update'} />
                 </div>
             </Popup>
-            <ConfirmationBox open={confirm} setConfirm={setConfirm}/>
+            <ConfirmationBox endpoint={'/appointment/deleteappointment'} id={id} open={confirm} setConfirm={setConfirm}/>
         </div>
     )
 }

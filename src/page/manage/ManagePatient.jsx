@@ -16,6 +16,7 @@ const ManagePatient = () => {
     const [open, setOpen] = useState(false)
     const [confirm, setConfirm] = useState(false)
     const [id, setId] = useState()
+    let role=localStorage.getItem('role')
 
     const [patientList, setpatientList] = useState([])
 
@@ -50,7 +51,7 @@ const ManagePatient = () => {
                         <th className='p-5'>Phone</th>
                         <th className='p-5'>Email</th>
                         <th className='p-5'>Admit On</th>
-                        <th className='p-5'>Action</th>
+                        {role!='doctor'&& <th className='p-5'>Action</th>}
                     </tr>
                 </thead>
                 <tbody>
@@ -63,10 +64,10 @@ const ManagePatient = () => {
                                 <td className='text-center p-3'>{ele.phone}</td>
                                 <td className='text-center p-3'>{ele.email}</td>
                                 <td className='text-center p-3'>{new Date(ele.admiton).toDateString()}</td>
-                                <td className='text-center p-3 flex items-center justify-center gap-x-4'>
+                                {role!='doctor'&& <td className='text-center p-3 flex items-center justify-center gap-x-4'>
                                     <Button onClick={() => editHandler(ele._id)} className={'bg-blue-500 px-4 py-2'}>Edit</Button>
                                     <Button onClick={() => deleteHandler(ele._id)} className={'px-4 py-2 bg-red-500'}>Delete</Button>
-                                </td>
+                                </td>}
                             </tr>
                         })
                     }

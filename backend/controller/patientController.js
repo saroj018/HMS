@@ -1,3 +1,4 @@
+import { appointmentModel } from "../database/model/appointmentModel.js";
 import { patientModel } from "../database/model/patientModel.js";
 import { ApiResponse } from "../helper/apiResponse.js";
 import { asyncHandler } from "../helper/asyncHandler.js";
@@ -41,6 +42,7 @@ export const addPatient = asyncHandler(async (req, resp, next) => {
 
 
 export const getAllPatients = asyncHandler(async (req, resp, next) => {
+    
     let patient = await patientModel.find()
     if (patient.length > 0) {
         return resp.json(new ApiResponse('', patient))
@@ -144,6 +146,7 @@ export const deletePatient=asyncHandler(async(req,resp,next)=>{
     }
 
     let deletePatient=await patientModel.findByIdAndDelete(id)
+    await appointmentModel.deleteMany({patient:id})
     if(!deletePatient){
         let err=new customError('failed to delete patient')
         return next(err)

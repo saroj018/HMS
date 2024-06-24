@@ -9,8 +9,8 @@ import { genToken } from "../helper/token.js";
 
 
 export const addDoctor = asyncHandler(async (req, resp, next) => {
-    const { email, password, name, address, gender, qualification, category, department, time } = req.body
-    if ([email, password, name, address, gender, qualification, category, department, time].includes('')) {
+    const { email, password, name, address, gender, qualification, category, department, shift } = req.body
+    if ([email, password, name, address, gender, qualification, category, department, shift].includes('')) {
         let err = new customError('all field are required')
         return next(err)
     }

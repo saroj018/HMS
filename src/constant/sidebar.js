@@ -12,7 +12,7 @@ export const sideBar=[
     {
         name:'Manage Patient',
         url:'/managepatient',
-        accessBy:['admin','receptionist']
+        accessBy:['admin','receptionist','doctor']
     },
     {
         name:'Add Doctor',

@@ -2,7 +2,7 @@ import React, { useEffect } from 'react'
 import { useNavigate } from 'react-router-dom'
 let accessByAdmin = ['/', '/addpatient', '/managepatient', '/addreceptionist', '/managereceptionist', '/adddoctor', '/managedoctor', '/viewappointment']
 let accessByReceptionist = ['/', '/addpatient', '/managepatient', '/adddoctor', '/managedoctor', '/viewappointment']
-let accessByDoctor = ['/viewappointment']
+let accessByDoctor = ['/viewappointment','/managepatient']
 let accessByPatient = ['/bookappointment', '/viewappointment']
 
 const ProtectedRoute = ({ component }) => {
