@@ -53,7 +53,7 @@ const ManageDoctor = () => {
                         <th className='p-5'>Doctor Name</th>
                         <th className='p-5'>Address</th>
                         <th className='p-5'>Email</th>
-                        <th className='p-5'>Time</th>
+                        <th className='p-5'>Shift</th>
                         <th className='p-5'>Gender</th>
                         <th className='p-5'>Department</th>
                         <th className='p-5'>Qualification</th>
@@ -69,7 +69,7 @@ const ManageDoctor = () => {
                                 <td className='text-center p-3'>{ele.name}</td>
                                 <td className='text-center p-3'>{ele.address}</td>
                                 <td className='text-center p-3'>{ele.email}</td>
-                                <td className='text-center p-3'>{ele.time}</td>
+                                <td className='text-center p-3'>{ele.shift}</td>
                                 <td className='text-center p-3'>{ele.gender}</td>
                                 <td className='text-center p-3'>{ele.department}</td>
                                 <td className='text-center p-3'>{ele.qualification}</td>
