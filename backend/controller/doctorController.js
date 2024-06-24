@@ -102,6 +102,17 @@ export const getSingleDoctor = asyncHandler(async (req, resp, next) => {
     return resp.json(new ApiResponse('', findDoctor))
 })
 
+const[doctor,setDoctor]=useState({
+    name:'',
+    email:'',
+    password:'',
+    shift:'',
+    department:'',
+    category:'',
+    address:'',
+    qualification:'',
+    gender:''
+  })
 
 export const updateDoctor = asyncHandler(async (req, resp, next) => {
     let { id } = req.query
@@ -109,10 +120,10 @@ export const updateDoctor = asyncHandler(async (req, resp, next) => {
         let err = new customError('please provide id')
         return next(err)
     }
-    let { name, address, phone } = req.body
+    let { name, address,shift,department,category,qualification,gender } = req.body
     console.log(name);
 
-    if ([name, address, phone].includes('')) {
+    if ([name, address,shift,department,category,qualification,gender].includes('')) {
         let err = new customError('please provide all field')
         return next(err)
     }
@@ -120,7 +131,11 @@ export const updateDoctor = asyncHandler(async (req, resp, next) => {
     let updatePatient = await doctorModel.findByIdAndUpdate(id, {
         name,
         address,
-        phone
+        qualification,
+        gender,
+        category,
+        shift,
+        department
     },
         {
             new: true, runValidators: true
