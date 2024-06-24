@@ -5,7 +5,7 @@ import {  patientAuth } from "../middleware/auth.js";
 export const patientRoute=Router()
 
 patientRoute.route('/addpatient').post(addPatient)
-patientRoute.route('/getallpatient').get(patientAuth,getAllPatients)
+patientRoute.route('/getallpatient').get(getAllPatients)
 patientRoute.route('/login').post(patientLogin)
 patientRoute.route('/getsinglepatient').get(getSinglePatient)
 patientRoute.route('/updatepatient').post(updatePatient)

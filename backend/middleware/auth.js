@@ -16,6 +16,7 @@ export const patientAuth = asyncHandler(async (req, resp, next) => {
 
     console.log(token);
     let getPayload = decodeToken(token)
+    console.log(getPayload);
 
     if (getPayload.role == 'patient') {
         let findUser = await patientModel.findOne({ email: getPayload.email })

@@ -30,7 +30,7 @@ export const bookAppointment = asyncHandler(async (req, resp, next) => {
 
 export const getAllAppointment = asyncHandler(async (req, resp, next) => {
     let { _id } = req.user
-    let { role } = req.role
+    let role = req.role
     let appointment
 
     if (role == 'patient') {

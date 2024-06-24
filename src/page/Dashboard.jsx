@@ -1,14 +1,40 @@
-import React from 'react'
+import React, { useEffect, useState } from 'react'
 import NumberBox from '../components/NumberBox'
+import { getFetch } from '../config/getFetch'
 
 const Dashboard = () => {
-    console.log(window.location.pathname);
+
+    const[patientList,setpatientList]=useState([])
+    const[receptionistList,setreceptionistList]=useState([])
+    const[doctorList,setdoctorList]=useState([])
+    
+    const getAllPatients = async () => {
+        let patient = await getFetch(import.meta.env.VITE_HOST + '/patient/getallpatient')
+        console.log(patient);
+        setpatientList(patient?.data)
+    }
+    const getAllDoctor = async () => {
+        let doctor = await getFetch(import.meta.env.VITE_HOST + '/doctor/getalldoctor')
+        console.log(doctor);
+        setdoctorList(doctor?.data)
+    }
+    const getAllReceptionist = async () => {
+        let receptionist = await getFetch(import.meta.env.VITE_HOST + '/receptionist/getallreceptionist')
+        console.log(receptionist);
+        setreceptionistList(receptionist?.data)
+    }
+
+    useEffect(()=>{
+        getAllPatients()
+        getAllReceptionist()
+        getAllDoctor()
+    },[])
     return (
         <div className='w-full mt-4 px-3' >
             <div className='flex justify-between gap-x-10'>
-                <NumberBox number='10' heading='Total Patient'/>
-                <NumberBox number='20' heading='Total Doctor'/>
-                <NumberBox number='30' heading='Total Receptionist'/>
+                <NumberBox number={patientList?.length} heading='Total Patient'/>
+                <NumberBox number={doctorList?.length} heading='Total Doctor'/>
+                <NumberBox number={receptionistList?.length} heading='Total Receptionist'/>
             </div>
             <div className=''>
                 <h1 className='text-4xl font-bold my-5'>Dashboard</h1>
@@ -25,14 +51,14 @@ const Dashboard = () => {
                     </thead>
                     <tbody>
                         {
-                            Array(10).fill(null).map((_, index) => {
+                            patientList&&patientList?.map((ele, index) => {
                                 return <tr key={index} className='border-2 border-gray-500'>
-                                    <td className='text-center p-3'>3498</td>
-                                    <td className='text-center p-3'>John Doe</td>
-                                    <td className='text-center p-3'>Kathmandu</td>
-                                    <td className='text-center p-3'>9876543210</td>
-                                    <td className='text-center p-3'>abc@gmail.com</td>
-                                    <td className='text-center p-3'>2020-2-3</td>
+                                    <td className='text-center p-3'>{ele._id}</td>
+                                    <td className='text-center p-3'>{ele.name}</td>
+                                    <td className='text-center p-3'>{ele.address}</td>
+                                    <td className='text-center p-3'>{ele.phone}</td>
+                                    <td className='text-center p-3'>{ele.email}</td>
+                                    <td className='text-center p-3'>{new Date(ele.admiton).toDateString()}</td>
                                 </tr>
                             })
                         }
